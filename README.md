@@ -13,3 +13,16 @@ $env:SECURITY_MODE="2"
 $env:SECURITY_MODE="3"
 Run the application: python app.py
 
+Mac test: 
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+SECURITY_MODE=0 python app.py
+SECURITY_MODE=1 python app.py
+SECURITY_MODE=2 python app.py
+SECURITY_MODE=3 python app.py
+
+
+Login:
+Username: student
+Password: DemoPass123!
+
