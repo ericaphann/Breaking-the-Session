@@ -1,19 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login — Breaking the Session</title>
 </head>
 
 <body>
+
     <h1>Login</h1>
 
-    <form method="POST">
-        <label>Username:</label>
-        <input type="text" name="username" required>
+    <p>Enter your credentials to continue.</p>
+
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST" action="/login">
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <br><br>
 
         <button type="submit">Login</button>
+
     </form>
+
+    <p>
+        Demo username: <strong>student</strong>
+    </p>
+
+    <p>
+        Demo password: <strong>DemoPass123!</strong>
+    </p>
+
+    <a href="/">Back to Home</a>
+
 </body>
 
 </html>

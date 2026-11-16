@@ -1,17 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Breaking the Session</title>
 </head>
 
 <body>
+
     <h1>Breaking the Session</h1>
-    <h2>Understanding and Preventing Session Fixation</h2>
 
-    <p>Group 6 Security Project</p>
+    <h2>
+        Understanding and Preventing Session Fixation
+    </h2>
 
-    <a href="/login">Go to Login</a>
+    <p>
+        Group 6 — Cybersecurity Course Project
+    </p>
+
+    <p>
+        This application demonstrates how session fixation
+        attacks work and how secure session management
+        prevents them.
+    </p>
+
+    <h3>Current Security Mode: {{ mode }}</h3>
+
+    <p>
+        Mode 0: Vulnerable authentication<br>
+        Mode 1: Hardened cookies without regeneration<br>
+        Mode 2: Session regeneration<br>
+        Mode 3: Full defense-in-depth
+    </p>
+
+    <a href="/login">Login</a>
+
 </body>
 
 </html>
