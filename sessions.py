@@ -21,6 +21,7 @@ def create_session():
     sessions[session_id] = {
         "username": None,
         "authenticated": False,
+        "ua_hash": None, 
         "created_at": time.time()
     }
 
@@ -61,6 +62,25 @@ def authenticate_session(session_id, username):
     session["authenticated"] = True
 
     return True
+
+def regenerate_session(old_session_id, username, ua_hash=None):
+    """                                                            
+    The fix: on successful login, delete the pre-login session     
+    and issue a brand-new ID for the logged-in user.               
+    """                                                            
+    invalidate_session(old_session_id)                             
+                                                                   
+    new_session_id = generate_session_id()                         
+                                                                   
+    sessions[new_session_id] = {                                   
+        "username": username,                                      
+        "authenticated": True,                                     
+        "ua_hash": ua_hash,                                        
+        "created_at": time.time()                                  
+    }                                                              
+                                                                  
+    return new_session_id                                         
+
 
 
 def invalidate_session(session_id):

@@ -19,6 +19,8 @@ from config import (
     DEMO_PORT,
     COOKIE_NAME,
     HARDEN_COOKIES,
+    REGENERATE_ON_LOGIN,
+    BIND_USER_AGENT,
     ALLOW_URL_SESSION_PLANTING
 )
 
@@ -26,9 +28,11 @@ from sessions import (
     create_session,
     get_session,
     authenticate_session,
+    regenerate_session,
     invalidate_session
 )
 
+from security import user_agent_hash, binding_matches
 
 app = Flask(__name__, template_folder="Website")
 
@@ -111,16 +115,14 @@ def login():
             )
             return set_session_cookie(response, session_id)
 
-        if SECURITY_MODE in (2, 3):
-            return (
-                "Secure modes are not implemented yet. "
-                "Krupali will add session regeneration.",
-                501
-            )
-
-        # Intentionally vulnerable Modes 0 and 1:
-        # Authenticate without regenerating the ID.
-        authenticate_session(session_id, username)
+        if REGENERATE_ON_LOGIN:                                      
+            ua_hash = (                                              
+                user_agent_hash(request.headers.get("User-Agent"))   
+                if BIND_USER_AGENT else None                         
+            )                                                       
+            session_id = regenerate_session(session_id, username, ua_hash)   
+        else:                                                        
+            authenticate_session(session_id, username)              
 
         response = make_response(
             redirect(url_for("dashboard"))
@@ -143,6 +145,12 @@ def dashboard():
     if session is None or not session["authenticated"]:
         return "401 Unauthorized: Please log in.", 401
 
+    if BIND_USER_AGENT and not binding_matches(                      
+        session.get("ua_hash"), request.headers.get("User-Agent")    
+    ):                                                               
+        invalidate_session(session_id)                               
+        return "401 Unauthorized: Session binding check failed.", 401    
+    
     return render_template(
         "dashboard.html",
         username=session["username"],
